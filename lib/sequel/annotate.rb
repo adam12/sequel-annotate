@@ -29,9 +29,13 @@ module Sequel
         end
 
         if name
-          klass = name.constantize
-          if klass.ancestors.include?(Sequel::Model)
-            new(klass).annotate(path, options)
+          until name == ""
+            klass = name.constantize
+            if klass.ancestors.include?(Sequel::Model)
+              break new(klass).annotate(path, options)
+            end
+
+            name.slice!(name.rindex("::")..)
           end
         end
       end
